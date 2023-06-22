@@ -1,7 +1,5 @@
 package onqlave_errors;
 
-import java.util.Arrays;
-
 public enum ErrorCodes {
     Server("Server"),
     InvalidInput("InvalidInput"),
