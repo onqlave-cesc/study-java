@@ -5,7 +5,7 @@ import java.nio.ByteOrder;
 import java.time.Instant;
 import java.util.Map;
 
-public interface TypeResolver {
+interface TypeResolver {
     byte[] serialise(String name, Object input) throws Exception;
     Object deserialise(String name, byte[] input) throws Exception;
 }
@@ -149,7 +149,6 @@ interface KeyOperation {
 interface KeyFormat {
     int size();
 }
-
 public interface Unwrapping {
     byte[] unwrapKey(byte[] wdk, byte[] epk, byte[] fp, byte[] password) throws Exception;
 }

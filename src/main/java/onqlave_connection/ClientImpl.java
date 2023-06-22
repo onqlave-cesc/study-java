@@ -1,4 +1,3 @@
-
 package onqlave_connection;
 
 import com.google.gson.Gson;
