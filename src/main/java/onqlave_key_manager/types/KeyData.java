@@ -9,5 +9,5 @@ public interface KeyData {
 
     KeyMaterialType getKeyMaterialType();
 
-    long getVersion();
+    int getVersion();
 }
