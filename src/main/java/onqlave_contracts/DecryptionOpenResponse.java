@@ -1,7 +1,7 @@
 
 package onqlave_contracts;
 
-class DecryptionOpenResponse extends BaseErrorResponse {
+public class DecryptionOpenResponse extends BaseErrorResponse {
     private WrappingKey WK;
     private EncryptionSecurityModel securityModel;
     private DataDecryptionKey DK;
