@@ -6,7 +6,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
-class DecryptionOpenRequest implements OnqlaveRequest {
+public class DecryptionOpenRequest implements OnqlaveRequest {
     @NotNull
     @Max(1500)
     private String encryptedDataKey;

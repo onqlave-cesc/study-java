@@ -1,16 +1,16 @@
 package onqlave_key_manager.primitives;
 
+import onqlave_key_manager.services.CPRNGService;
 import onqlave_key_manager.types.AEAD;
 import onqlave_key_manager.types.Key;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.SecureRandom;
 import java.util.Arrays;
 
 public class AESGCMAEAD implements AEAD {
-    private final SecureRandom randomService;
+    private final CPRNGService randomService;
     private final byte[] key;
     private final boolean prependIV;
 
@@ -19,7 +19,7 @@ public class AESGCMAEAD implements AEAD {
     private static final int MIN_PREPEND_IV_CIPHERTEXT_SIZE = AESGCMIVSize + AESGCMTagSize;
     private static final int MIN_NO_IV_CIPHERTEXT_SIZE = AESGCMTagSize;
 
-    public AESGCMAEAD(Key key, SecureRandom randomService) throws Exception {
+    public AESGCMAEAD(Key key,  CPRNGService randomService) throws Exception {
         byte[] keyValue = key.getData().getValue();
         int keySize = keyValue.length;
         if (keySize != 16 && keySize != 32) {
@@ -29,10 +29,15 @@ public class AESGCMAEAD implements AEAD {
         this.key = Arrays.copyOf(keyValue, keySize);
         this.prependIV = true;
     }
+    public static void ValidateAESKeySize(int size) throws Exception{
+        if (size != 16 && size != 32) {
+            throw new IllegalArgumentException("Invalid AES key size; want 16 or 32, got " + size);
+        }
+    }
 
     @Override
     public byte[] encrypt(byte[] plaintext, byte[] associatedData) throws Exception {
-        byte[] iv = randomService.generateSeed(AESGCMIVSize);
+        byte[] iv = randomService.getRandomBytes(AESGCMIVSize);
 
         Cipher cipher = newCipher(Cipher.ENCRYPT_MODE, key, iv);
 
