@@ -53,15 +53,6 @@ class Credential {
     }
 }
 
-public class RetrySettings {
-    public final int maxRetries;
-    public final int retryDelay;
-
-    public RetrySettings(int maxRetries, int retryDelay) {
-        this.maxRetries = maxRetries;
-        this.retryDelay = retryDelay;
-    }
-}
 
 
 public interface Connection {
@@ -89,7 +80,7 @@ class OnqlaveConnection implements Connection {
     private final Configuration configuration;
 
     public OnqlaveConnection(Configuration configuration, Hasher hasher, CustomLogger logger) {
-        this.client = new Client(configuration.retry, logger);
+        this.client = new ClientRequest(configuration.retry, logger);
         this.hasher = hasher;
         this.logger = logger;
         this.configuration = configuration;
@@ -145,16 +136,18 @@ class OnqlaveConnection implements Connection {
             response = client.post(urlString, body, headers);
         } catch (IOException e) {
             throw new OnqlaveError(Server, String.format(CLIENT_ERROR_PORTING_REQUEST, operation, "HTTP:POST"), e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         return response;
     }
 }
 
-class Client {
+class ClientRequest implements Client {
     private final RetrySettings retry;
     private final CustomLogger logger;
 
-    public Client(RetrySettings retry, CustomLogger logger) {
+    public ClientRequest(RetrySettings retry, CustomLogger logger) {
         this.retry = retry;
         this.logger = logger;
     }

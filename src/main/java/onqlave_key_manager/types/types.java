@@ -98,10 +98,6 @@ class OnqlaveStructure {
     //constructor, getters, and setters
 }
 
-interface WrappingKeyFactory {
-    Unwrapping primitive(WrappingKeyOperation operation) throws Exception;
-}
-
 enum AlgorithmType {
     UNKNOWN_ALGORITHM(0),
     AES_GCM_128(1),
@@ -128,32 +124,6 @@ enum AlgorithmType {
         };
     }
 }
-
-public interface WrappingKeyOperation {
-    KeyFormat getFormat();
-    WrappingKeyFactory getFactory();
-}
-
-<<<<<<<< HEAD:src/main/java/onqlave_key_manager/types/Unwrapping.java
-interface KeyOperation {
-    KeyFormat getFormat();
-    KeyFactory getFactory();
-}
-
-interface KeyFormat {
-    int size();
-}
-public interface Unwrapping {
-    byte[] unwrapKey(byte[] wdk, byte[] epk, byte[] fp, byte[] password) throws Exception;
-}
-
-class KeyID {
-    private int value;
-    //constructor, getters, and setters
-}
-
-========
->>>>>>>> 096dd5d (Update package key manager):src/main/java/onqlave_key_manager/types/TypeResolver.java
 class Algorithm implements AlgorithmSeriliser, AlogorithmDeserialiser {
     private byte version;
     private byte algo;

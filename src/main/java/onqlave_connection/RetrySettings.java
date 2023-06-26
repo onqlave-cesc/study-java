@@ -3,6 +3,8 @@ package onqlave_connection;
 import java.time.Duration;
 
 public class RetrySettings {
+    public int retryDelay;
+    public int maxRetries;
     private int count;
     private Duration waitTime;
     private Duration maxWaitTime;
