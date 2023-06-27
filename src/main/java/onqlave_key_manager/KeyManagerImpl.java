@@ -2,6 +2,8 @@ package onqlave_key_manager;
 
 import java.util.*;
 
+import org.javatuples.Triplet;
+
 import com.google.gson.Gson;
 
 import onqlave_connection.*;
@@ -56,7 +58,7 @@ public class KeyManagerImpl implements KeyManager {
     this.logger = onqlaveLogger;
   }
 
-  public List<Object> fetchEncryptionKey() throws Exception {
+  public Triplet<byte[], byte[], String> fetchEncryptionKey() throws Exception {
     String operation = "FetchEncryptionKey";
     EncryptionOpenRequest request = new EncryptionOpenRequest();
     byte[] data;
@@ -73,10 +75,11 @@ public class KeyManagerImpl implements KeyManager {
     String wrappingAlgo = response.getSecurityModel().getWrappingAlgorithm();
     String algo = response.getSecurityModel().getAlgorithm();
     byte[] dk = this.unwrapKey(wrappingAlgo, operation, wdk, epk, fp, this.config.credential.getSecretKey().getBytes());
-    return Arrays.asList(edk, dk, algo);
+    Triplet<byte[], byte[], String> trip = Triplet.with(edk, dk, algo);
+    return trip;
   }
 
-  public List<Object> fetchDecryptionKey(byte[] edk) throws Exception {
+  public byte[] fetchDecryptionKey(byte[] edk) throws Exception {
     String operation = "FetchDecryptionKey";
     DecryptionOpenRequest request = new DecryptionOpenRequest(edk.toString());
     byte[] data;
@@ -91,7 +94,7 @@ public class KeyManagerImpl implements KeyManager {
     byte[] fp = response.getWK().getKeyFingerprint().getBytes();
     String wrappingAlgo = response.getSecurityModel().getWrappingAlgorithm();
     byte[] dk = this.unwrapKey(wrappingAlgo, operation, wdk, epk, fp, this.config.credential.getSecretKey().getBytes());
-    return Arrays.asList(dk);
+    return dk;
   }
 
   private byte[] unwrapKey(String algo, String operation, byte[] wdk, byte[] epk, byte[] fp, byte[] password) throws Exception {

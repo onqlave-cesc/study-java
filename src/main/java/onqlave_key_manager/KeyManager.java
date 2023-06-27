@@ -1,8 +1,8 @@
 package onqlave_key_manager;
 
-import java.util.*;
+import org.javatuples.Triplet;
 
 public interface KeyManager {
-  List<Object> fetchEncryptionKey() throws Exception;
-  List<Object> fetchDecryptionKey(byte[] edk) throws Exception;
+  Triplet<byte[], byte[], String> fetchEncryptionKey() throws Exception;
+  byte[] fetchDecryptionKey(byte[] edk) throws Exception;
 }
